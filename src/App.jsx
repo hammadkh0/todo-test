@@ -1,9 +1,10 @@
 import Todos from "./components/Todos";
 import "./App.css";
 function App() {
+  const isLoggedIn = localStorage.getItem("jwt");
   return (
     <>
-      <Todos />
+      <Todos isLoggedIn={isLoggedIn} />
     </>
   );
 }

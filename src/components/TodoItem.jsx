@@ -13,9 +13,10 @@ TodoItem.propTypes = {
     completedAt: PropTypes.instanceOf(Date),
   }).isRequired,
   deleteTodo: PropTypes.func.isRequired,
+  onComplete: PropTypes.func.isRequired,
 };
 
-function TodoItem({ todo, deleteTodo }) {
+function TodoItem({ todo, deleteTodo, onComplete }) {
   const [hovered, setHovered] = useState(false);
 
   const handleTodoHover = () => {
@@ -26,12 +27,13 @@ function TodoItem({ todo, deleteTodo }) {
     setHovered(false);
   };
 
-  const Icon = hovered ? (
+  const Icon = todo.completed ? (
+    <TbCircleCheckFilled size={25} color="#A4967B" />
+  ) : hovered ? (
     <TbCircleCheckFilled size={25} color="#A4967B" />
   ) : (
     <TbCircle size={25} color="#A4967B" />
   );
-
   return (
     <div
       key={todo.id}
@@ -39,9 +41,19 @@ function TodoItem({ todo, deleteTodo }) {
       onMouseOut={handleTodoLeave}
       className={styles.todoItem}
     >
-      <div className={styles.title}>
+      <div
+        className={styles.title}
+        onClick={() => {
+          onComplete(todo.id);
+        }}
+      >
         <span>{Icon}</span>
-        <p className={styles.titleText}>{todo.title}</p>
+        <p
+          className={styles.titleText}
+          style={todo.completed ? { textDecoration: "line-through" } : null}
+        >
+          {todo.title}
+        </p>
       </div>
       <span>
         <RxDragHandleDots2
