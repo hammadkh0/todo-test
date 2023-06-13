@@ -23,7 +23,9 @@ function Todos() {
     if (!jwt) {
       setTodos(todos);
     } else {
-      fetch("http://localhost:5000/api/v1/todos", { headers: { Authorization: `Bearer ${jwt}` } })
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos`, {
+        headers: { Authorization: `Bearer ${jwt}` },
+      })
         .then((res) => res.json())
         .then((data) => {
           setTodos(data);
@@ -50,7 +52,7 @@ function Todos() {
       localStorage.setItem("saveLater", JSON.stringify(updatedTodos));
       setTodos(updatedTodos);
     } else {
-      fetch("http://localhost:5000/api/v1/todos", {
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +71,7 @@ function Todos() {
 
   const deleteTodo = (id) => {
     if (isLoggedIn) {
-      fetch(`http://localhost:5000/api/v1/todos/${id}`, {
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt")}`,
@@ -97,7 +99,7 @@ function Todos() {
   };
 
   const saveTodosToDB = () => {
-    fetch("http://localhost:5000/api/v1/todos/saveAll", {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos/saveAll`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
