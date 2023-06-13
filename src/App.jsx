@@ -7,12 +7,10 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const isLoggedIn = localStorage.getItem("jwt");
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Todos isLoggedIn={isLoggedIn} />} />
+        <Route path="/" element={<Todos />} />
         <Route path="/login" element={<Auth type="login" />} />
         <Route path="/signup" element={<Auth type="signup" />} />
       </Routes>

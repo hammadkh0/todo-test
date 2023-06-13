@@ -12,7 +12,6 @@ const LoginForm = ({ navigate }) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log({ email, password });
     fetch("http://localhost:5000/api/v1/users/login", {
       method: "POST",
       headers: {
@@ -29,7 +28,7 @@ const LoginForm = ({ navigate }) => {
           localStorage.setItem("jwt", data.token);
           localStorage.setItem("user", JSON.stringify({ name: data.name, image: data.image }));
           navigate("/");
-        }, 2000);
+        }, 1500);
       })
       .catch((err) => {
         console.log(err);
@@ -96,7 +95,7 @@ const SignupForm = ({ navigate }) => {
           localStorage.setItem("jwt", data.token);
           localStorage.setItem("user", JSON.stringify({ name: data.name, image: data.image }));
           navigate("/");
-        }, 2000);
+        }, 1500);
       })
       .catch((err) => console.log(err));
   };
