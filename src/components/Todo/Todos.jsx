@@ -28,7 +28,7 @@ function Todos() {
       })
         .then((res) => res.json())
         .then((data) => {
-          setTodos(data);
+          setTodos([...data, ...todos]);
         })
         .catch((err) => {
           console.log(err);
@@ -84,6 +84,15 @@ function Todos() {
   };
 
   const handleCompletion = (id) => {
+    if (isLoggedIn) {
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+      });
+    }
     const newTodos = Todos.map((todo) => {
       if (todo.id === id) {
         return {
@@ -104,6 +113,7 @@ function Todos() {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
       },
       body: JSON.stringify(Todos),
       mode: "cors",
@@ -111,6 +121,7 @@ function Todos() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        localStorage.setItem("saveLater", JSON.stringify([]));
       });
   };
   const logout = () => {

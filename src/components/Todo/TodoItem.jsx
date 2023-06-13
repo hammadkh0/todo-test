@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
     createdAt: PropTypes.instanceOf(Date).isRequired,
