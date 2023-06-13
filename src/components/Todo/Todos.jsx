@@ -2,12 +2,13 @@ import styles from "./Todos.module.css";
 import TodoItem from "./TodoItem";
 import { BsPlus } from "react-icons/bs";
 import { IoSendSharp } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 function Todos() {
-  const [input, setInput] = useState("");
+  const inputRef = useRef(null);
+
   const [Todos, setTodos] = useState([]);
   const isLoggedIn = !!localStorage.getItem("jwt");
   const navigate = useNavigate();
@@ -38,19 +39,20 @@ function Todos() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!input) return;
+    if (!inputRef.current.value) return;
     if (!isLoggedIn) {
       const updatedTodos = [
         ...Todos,
         {
           id: Todos.length ? Todos[Todos.length - 1].id + 1 : 1, //get last element id and add 1 to it.
-          title: input,
+          title: inputRef.current.value,
           completed: false,
           createdAt: new Date(),
         },
       ];
       localStorage.setItem("saveLater", JSON.stringify(updatedTodos));
       setTodos(updatedTodos);
+      inputRef.current.value = "";
     } else {
       fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos`, {
         method: "POST",
@@ -58,15 +60,13 @@ function Todos() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("jwt")}`,
         },
-        body: JSON.stringify({ title: input }),
+        body: JSON.stringify({ title: inputRef.current.value }),
       })
         .then((res) => res.json())
         .then((data) => {
           setTodos([...Todos, data]);
         });
     }
-
-    setInput("");
   };
 
   const deleteTodo = (id) => {
@@ -162,17 +162,14 @@ function Todos() {
         ))}
       </div>
       <form className={styles.addTodo} onSubmit={handleSubmit}>
-        <BsPlus size={25} color="white" />
-        <input
-          type="text"
-          value={input}
-          name="addTodo"
-          id="addTodo"
-          placeholder="Add Task"
-          onChange={(e) => {
-            setInput(e.target.value);
+        <BsPlus
+          size={25}
+          color="white"
+          onClick={() => {
+            inputRef.current.focus();
           }}
         />
+        <input type="text" name="addTodo" id="addTodo" placeholder="Add Task" ref={inputRef} />
         <IoSendSharp size={25} color="white" onClick={handleSubmit} />
       </form>
     </>
