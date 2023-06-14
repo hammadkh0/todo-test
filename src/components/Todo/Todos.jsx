@@ -4,12 +4,14 @@ import { BsPlus } from "react-icons/bs";
 import { IoSendSharp } from "react-icons/io5";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toastError, toastSuccess } from "../../utils/toastMessages";
+import { ToastContainer } from "react-toastify";
 
 // eslint-disable-next-line react/prop-types
 function Todos() {
   const inputRef = useRef(null);
-
   const [Todos, setTodos] = useState([]);
+
   const isLoggedIn = !!localStorage.getItem("jwt");
   const navigate = useNavigate();
 
@@ -65,6 +67,7 @@ function Todos() {
         .then((res) => res.json())
         .then((data) => {
           setTodos([...Todos, data]);
+          inputRef.current.value = "";
         });
     }
   };
@@ -79,19 +82,22 @@ function Todos() {
       });
     }
     const newTodos = Todos.filter((todo) => todo.id !== id);
-    localStorage.setItem("saveLater", JSON.stringify(newTodos));
     setTodos(newTodos);
+    if (!isLoggedIn) localStorage.setItem("saveLater", JSON.stringify(newTodos));
   };
 
-  const handleCompletion = (id) => {
+  const handleCompletion = async (id) => {
     if (isLoggedIn) {
-      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("jwt")}`,
         },
       });
+      if (!response.ok) {
+        return toastError("Something went wrong! Please try again.");
+      }
     }
     const newTodos = Todos.map((todo) => {
       if (todo.id === id) {
@@ -103,11 +109,13 @@ function Todos() {
       }
       return todo;
     });
-    localStorage.setItem("saveLater", JSON.stringify(newTodos));
     setTodos(newTodos);
+    if (!isLoggedIn) localStorage.setItem("saveLater", JSON.stringify(newTodos));
   };
 
   const saveTodosToDB = () => {
+    const todosToSave = Todos.map((todo) => ({ ...todo, id: undefined }));
+    console.log("🚀 ~ file: Todos.jsx:118 ~ saveTodosToDB ~ todosToSave:", todosToSave);
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos/saveAll`, {
       method: "POST",
       headers: {
@@ -115,13 +123,17 @@ function Todos() {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${localStorage.getItem("jwt")}`,
       },
-      body: JSON.stringify(Todos),
+      body: JSON.stringify({ todos: todosToSave }),
       mode: "cors",
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        if (data.status === "fail") {
+          toastError(data.message);
+          return;
+        }
         localStorage.setItem("saveLater", JSON.stringify([]));
+        toastSuccess("Todos saved successfully!");
       });
   };
   const logout = () => {
@@ -133,6 +145,7 @@ function Todos() {
 
   return (
     <>
+      <ToastContainer />
       {!isLoggedIn && (
         <p>
           <span className="login" onClick={() => navigate("/login")}>
