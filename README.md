@@ -27,9 +27,9 @@ Before you begin, ensure that you have the following installed:
 
    - Using `yarn`
 
-     Open your command line interface (CLI) and navigate to your project directory. Then run the following command:
+    Open your command line interface (CLI) and navigate to your project directory. Then run the following command:
 
-     ```cmd
-     yarn install
-     ```
+    ```cmd
+    yarn install
+    ```
 4. Run the project using `npm run dev` command
