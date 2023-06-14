@@ -1,17 +1,18 @@
-import styles from "./Todos.module.css";
-import TodoItem from "./TodoItem";
-import { BsPlus } from "react-icons/bs";
-import { IoSendSharp } from "react-icons/io5";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toastError, toastSuccess } from "../../utils/toastMessages";
 import { ToastContainer } from "react-toastify";
+import TodoItem from "./TodoItem";
+import { toastError, toastSuccess } from "../../utils/toastMessages";
+
+import { BsPlus } from "react-icons/bs";
+import { IoSendSharp } from "react-icons/io5";
+
+import styles from "./Todos.module.css";
 
 // eslint-disable-next-line react/prop-types
 function Todos() {
   const inputRef = useRef(null);
   const [Todos, setTodos] = useState([]);
-
   const isLoggedIn = !!localStorage.getItem("jwt");
   const navigate = useNavigate();
 
@@ -88,6 +89,7 @@ function Todos() {
 
   const handleCompletion = async (id) => {
     if (isLoggedIn) {
+      // if user is logged in, then update todo on backend.
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos/${id}`, {
         method: "PATCH",
         headers: {
@@ -96,11 +98,19 @@ function Todos() {
         },
       });
       if (!response.ok) {
-        return toastError("Something went wrong! Please try again.");
+        toastError("Something went wrong! Please try again.");
+        return;
       }
     }
+    // to check if the todo is completed or is set to incomplete
+    let didTotoComplete = true;
+    // update todo on client side as well.
     const newTodos = Todos.map((todo) => {
       if (todo.id === id) {
+        if (todo.completed) {
+          // if todo was completed, this means it will become incomplete so set the variable to False.
+          didTotoComplete = false;
+        }
         return {
           ...todo,
           completedAt: todo.completed ? undefined : new Date(),
@@ -110,12 +120,16 @@ function Todos() {
       return todo;
     });
     setTodos(newTodos);
+    // only update the todos in localStorage if no user exists. Otherwise only db updation is considered
     if (!isLoggedIn) localStorage.setItem("saveLater", JSON.stringify(newTodos));
+    // return boolean value to check if todo was completed or not.
+    return didTotoComplete;
   };
 
   const saveTodosToDB = () => {
+    // 1. Remove the integer id from the locally saved todos.
     const todosToSave = Todos.map((todo) => ({ ...todo, id: undefined }));
-    console.log("🚀 ~ file: Todos.jsx:118 ~ saveTodosToDB ~ todosToSave:", todosToSave);
+    // 2. Send the todos to backend to save them.
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos/saveAll`, {
       method: "POST",
       headers: {
@@ -132,6 +146,7 @@ function Todos() {
           toastError(data.message);
           return;
         }
+        // 3. Clear the todos from localStorage.
         localStorage.setItem("saveLater", JSON.stringify([]));
         toastSuccess("Todos saved successfully!");
       });
@@ -163,8 +178,12 @@ function Todos() {
       </div>
       {isLoggedIn ? (
         <div>
-          <button onClick={saveTodosToDB}>Save Todos to Database</button>
-          <button onClick={logout}>Logout</button>
+          <button className={styles.saveButton} onClick={saveTodosToDB}>
+            Save Todos to Database
+          </button>
+          <button className={styles.logoutButton} onClick={logout}>
+            Logout
+          </button>
         </div>
       ) : (
         <> </>

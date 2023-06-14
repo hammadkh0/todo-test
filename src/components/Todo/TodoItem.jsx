@@ -1,8 +1,11 @@
+import { useRef, useState } from "react";
+import PropTypes from "prop-types";
+
 import { TbCircle, TbCircleCheckFilled } from "react-icons/tb";
 import { RxDragHandleDots2 } from "react-icons/rx";
-import { useState } from "react";
+
 import styles from "./Todos.module.css";
-import PropTypes from "prop-types";
+import bellSound from "../../assets/mixkit-achievement-bell-600-[AudioTrimmer.com].wav";
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
@@ -18,6 +21,7 @@ TodoItem.propTypes = {
 
 function TodoItem({ todo, deleteTodo, onComplete }) {
   const [hovered, setHovered] = useState(false);
+  const audioRef = useRef(null);
 
   const handleTodoHover = () => {
     setHovered(true);
@@ -41,10 +45,16 @@ function TodoItem({ todo, deleteTodo, onComplete }) {
       onMouseOut={handleTodoLeave}
       className={styles.todoItem}
     >
+      <audio src={bellSound} ref={audioRef}></audio>
+
       <div
         className={styles.title}
         onClick={() => {
-          onComplete(todo.id);
+          onComplete(todo.id).then((didTodoComplete) => {
+            if (didTodoComplete) {
+              audioRef.current.play();
+            }
+          });
         }}
       >
         <span>{Icon}</span>

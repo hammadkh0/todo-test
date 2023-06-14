@@ -9,7 +9,8 @@
     width: 30%;
     margin: 0 auto;
     overflow-y: scroll;
-    max-height: 52vh;
+    height: 52vh;
+    min-height: 100px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
@@ -59,4 +60,161 @@
 }
 .addTodo input::placeholder {
     color: rgb(202, 198, 198);
+}
+
+button {
+    border: none;
+    outline: none;
+    padding: 0.6%;
+    border-radius: 7px;
+    font-size: 15px;
+    margin-bottom: 1rem;
+}
+.saveButton {
+    background-color: #13a53f;
+    color: white;
+    margin-right: 1rem;
+}
+.logoutButton {
+    background-color: #cf1f1f;
+    color: white;
+    width: 70px;
+}
+
+@media screen and (max-width: 320px){
+    .todos {
+        width: 80%;
+    }
+    .todoItem {
+        padding:5px;
+        gap:10px
+
+    }
+    .addTodo {
+        width: 78%;
+    }
+    .titleText{
+        font-size: 10px;
+        width: 10rem;
+    }
+}
+@media screen and (min-width: 321px) and (max-width: 375px){
+    .todos {
+        width: 80%;
+    }
+    .todoItem {
+        padding:7px;
+        gap:10px
+    }
+    .addTodo {
+        width: 78%;
+    }
+    .titleText{
+        font-size: 12px;
+        width: 10rem;
+    }
+}
+@media screen and (min-width: 376px) and (max-width: 424px){
+    .todos {
+        width: 80%;
+    }
+    .todoItem {
+        padding:10px;
+        gap:10px
+    }
+    .addTodo {
+        width: 78%;
+    }
+    .titleText{
+        font-size: 12px;
+        width: 10rem;
+    }
+}
+@media screen and (min-width:425px) and (max-width: 540px){
+    .todos {
+        width: 80%;
+    }
+    .todoItem {
+        padding:10px;
+        gap:10px
+    }
+    .addTodo {
+        width: 78%;
+    }
+    .titleText {
+        font-size: 14px;
+        width: 12rem;
+    }
+   
+}
+@media screen and (min-width: 541px) and (max-width:767px){
+    .todos {
+        width: 80%;
+    }
+    .todoItem {
+        padding:10px;
+        gap:10px
+    }
+    .addTodo {
+        width: 78%;
+    }
+}
+@media screen and (min-width: 768px) and ( max-width:1023px){
+    .todos {
+        width: 70%;
+    }
+    .todoItem {
+        padding:10px
+    }
+    .addTodo {
+        width: 68%;
+    }
+    .titleText {
+        font-size: 14px;
+    }   
+}
+@media screen and (min-width: 1024px) and (max-width: 1365px){
+    .todos {
+        width: 60%;
+        height: 55svh;
+    }
+    .todoItem {
+        padding:12px
+    }
+    .addTodo {
+        width: 58%;
+    }
+    .titleText {
+        font-size: 16px;
+    }
+}
+@media screen and (min-width: 1366px) and (max-width: 1919px){
+    .todos {
+        width: 50%;
+        height: 44svh;
+    }
+    .todoItem {
+        padding:14px
+    }
+    .addTodo {
+        width: 48%;
+    }
+    .titleText {
+        font-size: 18px;
+    }
+}
+@media screen and (min-width: 1920px) and (max-width: 2560px){
+    .todos {
+        width: 50%;
+        height: 32vh;
+    }
+    .todoItem {
+        padding:20px
+    }
+    .addTodo {
+        width: 48%;
+    }
+    .titleText {
+        font-size: 28px;
+    }
 }
