@@ -34,4 +34,6 @@ Before you begin, ensure that you have the following installed:
     ```cmd
     yarn install
     ```
-4. Run the project using `npm run dev` command
+4. Add `environemnt variable` in .env file in root and add the values:
+    - VITE_BACKEND_URL
+5. Run the project using `npm run dev` command
