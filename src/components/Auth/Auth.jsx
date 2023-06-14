@@ -3,7 +3,7 @@ import { ToastContainer } from "react-toastify";
 
 import styles from "./Auth.module.css";
 import { useNavigate } from "react-router-dom";
-import { toastSuccess } from "../../utils/toastMessages";
+import { toastError, toastSuccess } from "../../utils/toastMessages";
 
 // eslint-disable-next-line react/prop-types
 const LoginForm = ({ navigate }) => {
@@ -12,7 +12,7 @@ const LoginForm = ({ navigate }) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    fetch("http://localhost:5000/api/v1/users/login", {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,6 +23,10 @@ const LoginForm = ({ navigate }) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if (data.status === "fail") {
+          toastError(data.message);
+          return;
+        }
         toastSuccess("Login Successfull");
         setTimeout(() => {
           localStorage.setItem("jwt", data.token);
@@ -31,7 +35,7 @@ const LoginForm = ({ navigate }) => {
         }, 1500);
       })
       .catch((err) => {
-        console.log(err);
+        toastError(err.message);
       });
   };
   return (
@@ -79,7 +83,7 @@ const SignupForm = ({ navigate }) => {
   const handleSignup = (e) => {
     e.preventDefault();
     console.log({ name, email, password, imagePreview });
-    fetch("http://localhost:5000/api/v1/users/signup", {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,6 +94,10 @@ const SignupForm = ({ navigate }) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if (data.status === "fail") {
+          toastError(data.message);
+          return;
+        }
         toastSuccess("Signup Successfull");
         setTimeout(() => {
           localStorage.setItem("jwt", data.token);
@@ -97,7 +105,7 @@ const SignupForm = ({ navigate }) => {
           navigate("/");
         }, 1500);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => toastError(err.message));
   };
 
   const handleImageChange = (e) => {
