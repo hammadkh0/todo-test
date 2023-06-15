@@ -9,8 +9,8 @@
     width: 30%;
     margin: 0 auto;
     overflow-y: scroll;
-    height: 52vh;
-    min-height: 100px;
+    /* height: 52vh; */
+    max-height: 52vh;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
@@ -176,7 +176,7 @@ button {
 @media screen and (min-width: 1024px) and (max-width: 1365px){
     .todos {
         width: 60%;
-        height: 55svh;
+        /* height: 55svh; */
     }
     .todoItem {
         padding:12px
@@ -191,7 +191,7 @@ button {
 @media screen and (min-width: 1366px) and (max-width: 1919px){
     .todos {
         width: 50%;
-        height: 44svh;
+        /* height: 44svh; */
     }
     .todoItem {
         padding:14px
@@ -206,7 +206,7 @@ button {
 @media screen and (min-width: 1920px) and (max-width: 2560px){
     .todos {
         width: 50%;
-        height: 32vh;
+        /* height: 32vh; */
     }
     .todoItem {
         padding:20px

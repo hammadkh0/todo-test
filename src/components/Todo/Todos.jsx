@@ -13,8 +13,10 @@ import styles from "./Todos.module.css";
 function Todos() {
   const inputRef = useRef(null);
   const [Todos, setTodos] = useState([]);
-  const isLoggedIn = !!localStorage.getItem("jwt");
   const navigate = useNavigate();
+
+  const isLoggedIn = !!localStorage.getItem("jwt");
+  const localTodos = JSON.parse(localStorage.getItem("saveLater"))?.map((todo) => todo.id) || [];
 
   const image =
     JSON.parse(localStorage.getItem("user"))?.image ||
@@ -42,6 +44,7 @@ function Todos() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // If input is empty return.
     if (!inputRef.current.value) return;
     if (!isLoggedIn) {
       const updatedTodos = [
@@ -74,7 +77,7 @@ function Todos() {
   };
 
   const deleteTodo = (id) => {
-    if (isLoggedIn) {
+    if (isLoggedIn && !localTodos.includes(id)) {
       fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos/${id}`, {
         method: "DELETE",
         headers: {
@@ -84,11 +87,14 @@ function Todos() {
     }
     const newTodos = Todos.filter((todo) => todo.id !== id);
     setTodos(newTodos);
-    if (!isLoggedIn) localStorage.setItem("saveLater", JSON.stringify(newTodos));
+    localStorage.setItem(
+      "saveLater",
+      JSON.stringify(newTodos.filter((todo) => localTodos.includes(todo.id)))
+    );
   };
 
   const handleCompletion = async (id) => {
-    if (isLoggedIn) {
+    if (isLoggedIn && !localTodos.includes(id)) {
       // if user is logged in, then update todo on backend.
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/todos/${id}`, {
         method: "PATCH",
@@ -121,7 +127,11 @@ function Todos() {
     });
     setTodos(newTodos);
     // only update the todos in localStorage if no user exists. Otherwise only db updation is considered
-    if (!isLoggedIn) localStorage.setItem("saveLater", JSON.stringify(newTodos));
+
+    localStorage.setItem(
+      "saveLater",
+      JSON.stringify(newTodos.filter((todo) => localTodos.includes(todo.id)))
+    );
     // return boolean value to check if todo was completed or not.
     return didTotoComplete;
   };

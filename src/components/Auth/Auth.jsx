@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toastError, toastSuccess } from "../../utils/toastMessages";
 
 // eslint-disable-next-line react/prop-types
-const LoginForm = ({ navigate }) => {
+export const LoginForm = ({ navigate }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -74,7 +74,7 @@ const LoginForm = ({ navigate }) => {
 };
 
 // eslint-disable-next-line react/prop-types
-const SignupForm = ({ navigate }) => {
+export const SignupForm = ({ navigate }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
