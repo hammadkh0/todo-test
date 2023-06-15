@@ -40,6 +40,9 @@ function Todos() {
           console.log(err);
         });
     }
+    return () => {
+      setTodos([]);
+    };
   }, []);
 
   const handleSubmit = (e) => {
