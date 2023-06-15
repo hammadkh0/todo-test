@@ -14,7 +14,7 @@ Before you begin, ensure that you have the following installed:
 1. Open your command line interface (CLI).
 2. Clone the app using the following command:
     ```cmd
-    git clone [https://github.com/hammadkh0/todo-test.git](https://github.com/hammadkh0/todo-test.git)
+    git clone https://github.com/hammadkh0/todo-test.git
     ```
 3. Install packages using npm or yarn.
     - Using `npm`
@@ -34,4 +34,6 @@ Before you begin, ensure that you have the following installed:
     ```cmd
     yarn install
     ```
-4. Run the project using `npm run dev` command
+4. Add `environemnt variable` in .env file in root and add the values:
+    - VITE_BACKEND_URL
+5. Run the project using `npm run dev` command
