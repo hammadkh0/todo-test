@@ -32,12 +32,3 @@ body {
   ::-webkit-scrollbar-corner {
     background-color: #f1f1f1;
   }
-  
-  .login {
-    color: red;
-    cursor: pointer;
-  }
-  .signup {
-    color: white;
-    cursor: pointer;
-  }
