@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
-
-import styles from "./Auth.module.css";
 import { useNavigate } from "react-router-dom";
 import { toastError, toastSuccess } from "../../utils/toastMessages";
 
@@ -40,35 +38,46 @@ export const LoginForm = ({ navigate }) => {
   };
   return (
     <>
-      <ToastContainer />
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-        </div>
+      <div className=" min-h-screen flex items-center justify-center opacity-90">
+        <div className="auth-card">
+          <ToastContainer />
+          <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login</h2>
+          <form onSubmit={handleLogin}>
+            <div>
+              <label htmlFor="email" className="text-gray-800">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                className="auth-input"
+              />
+            </div>
+            <div>
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                className="auth-input"
+              />
+            </div>
 
-        <button type="submit">Login</button>
-      </form>
+            <button className="auth-btn" type="submit">
+              Login
+            </button>
+          </form>
+        </div>
+      </div>
     </>
   );
 };
@@ -120,60 +129,68 @@ export const SignupForm = ({ navigate }) => {
   };
   return (
     <>
-      <ToastContainer />
-
-      <form onSubmit={handleSignup} className={styles.form}>
-        <div>
-          <label htmlFor="email">Name</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
+      <div className=" min-h-screen flex items-center justify-center opacity-90">
+        <div className="auth-card">
+          <ToastContainer />
+          <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Signup</h2>
+          <form onSubmit={handleSignup}>
+            <div>
+              <label htmlFor="email">Name</label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                className="auth-input"
+              />
+            </div>
+            <div>
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={email}
+                autoComplete="on"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                className="auth-input"
+              />
+            </div>
+            <div>
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                value={password}
+                autoComplete="on"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                className="auth-input"
+              />
+            </div>
+            <div>
+              <label htmlFor="image">Upload Image</label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="auth-input"
+              />
+            </div>
+            {imagePreview && <img src={imagePreview} alt="Selected" style={{ width: "100px" }} />}
+            <button className="auth-btn">Signup</button>
+          </form>
         </div>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value={email}
-            autoComplete="on"
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            value={password}
-            autoComplete="on"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-        </div>
-        <div>
-          <label htmlFor="image">Upload Image</label>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </div>
-        {imagePreview && <img src={imagePreview} alt="Selected" style={{ width: "100px" }} />}
-        <button>Signup</button>
-      </form>
+      </div>
     </>
   );
 };

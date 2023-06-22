@@ -3,11 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import TodoItem from "./TodoItem";
 import { toastError, toastSuccess } from "../../utils/toastMessages";
-
-import { BsPlus } from "react-icons/bs";
-import { IoSendSharp } from "react-icons/io5";
-
-import styles from "./Todos.module.css";
+import TodoInput from "./TodoInput";
 
 // eslint-disable-next-line react/prop-types
 function Todos() {
@@ -16,6 +12,10 @@ function Todos() {
   const navigate = useNavigate();
 
   const isLoggedIn = !!localStorage.getItem("jwt");
+  /**
+   * double bang (!!) converts the value to boolean.
+   * if the localStorage has jwt then isLoggedIn will be converted to true else false.
+   */
   const localTodos = JSON.parse(localStorage.getItem("saveLater"))?.map((todo) => todo.id) || [];
 
   const image =
@@ -176,47 +176,42 @@ function Todos() {
       <ToastContainer />
       {!isLoggedIn && (
         <p>
-          <span className="login" onClick={() => navigate("/login")}>
+          <span className="text-red-500 cursor-pointer" onClick={() => navigate("/login")}>
             Login
           </span>{" "}
           or{" "}
-          <span className="signup" onClick={() => navigate("/signup")}>
+          <span className="text-white cursor-pointer" onClick={() => navigate("/signup")}>
             Signup
           </span>{" "}
           to Save Todos
         </p>
       )}
       <div>
-        <img src={image} alt="profile" className={styles.img} />
+        <img
+          src={image}
+          alt="profile"
+          className="h-[100px] w-[100px] rounded-[50%] object-cover m-auto"
+        />
       </div>
       {isLoggedIn ? (
         <div>
-          <button className={styles.saveButton} onClick={saveTodosToDB}>
+          <button className="button bg-[#13a53f] text-white mr-4 p-[10px]" onClick={saveTodosToDB}>
             Save Todos to Database
           </button>
-          <button className={styles.logoutButton} onClick={logout}>
+          <button className="button bg-[#cf1f1f] text-white w-[70px] p-[10px]" onClick={logout}>
             Logout
           </button>
         </div>
       ) : (
         <> </>
       )}
-      <div className={styles.todos}>
+      <div className="w-2/5 my-0 mx-auto overflow-y-scroll max-h-[52vh] rounded-tl-lg rounded-bl-lg">
         {Todos.map((todo, idx) => (
           <TodoItem key={idx} todo={todo} deleteTodo={deleteTodo} onComplete={handleCompletion} />
         ))}
       </div>
-      <form className={styles.addTodo} onSubmit={handleSubmit}>
-        <BsPlus
-          size={25}
-          color="white"
-          onClick={() => {
-            inputRef.current.focus();
-          }}
-        />
-        <input type="text" name="addTodo" id="addTodo" placeholder="Add Task" ref={inputRef} />
-        <IoSendSharp size={25} color="white" onClick={handleSubmit} />
-      </form>
+
+      <TodoInput handleSubmit={handleSubmit} inputRef={inputRef} />
     </>
   );
 }

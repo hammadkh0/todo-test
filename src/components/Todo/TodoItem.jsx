@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import { TbCircle, TbCircleCheckFilled } from "react-icons/tb";
 import { RxDragHandleDots2 } from "react-icons/rx";
 
-import styles from "./Todos.module.css";
 import bellSound from "../../assets/mixkit-achievement-bell-600-[AudioTrimmer.com].wav";
+import ConfirmationModal from "../Modal/ConfirmationModal";
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
@@ -21,12 +21,19 @@ TodoItem.propTypes = {
 
 function TodoItem({ todo, deleteTodo, onComplete }) {
   const [hovered, setHovered] = useState(false);
+  const [show, setShow] = useState(false);
   const audioRef = useRef(null);
+
+  const createdAt = new Date(todo.createdAt);
+  const formattedTime = createdAt.toLocaleTimeString();
+  const formattedDate = createdAt.toLocaleDateString();
+  const completedAt = new Date(todo.completedAt) || null;
+  const formattedCompletedTime = completedAt ? completedAt.toLocaleTimeString() : null;
+  const formattedCompletedDate = completedAt ? completedAt.toLocaleDateString() : null;
 
   const handleTodoHover = () => {
     setHovered(true);
   };
-
   const handleTodoLeave = () => {
     setHovered(false);
   };
@@ -43,36 +50,56 @@ function TodoItem({ todo, deleteTodo, onComplete }) {
       key={todo.id}
       onMouseOver={handleTodoHover}
       onMouseOut={handleTodoLeave}
-      className={styles.todoItem}
+      className="p-4 flex flex-col bg-[#EDECE7] cursor-pointer border-b border-b-[#aaaaaa] last:border-b-0"
     >
-      <audio src={bellSound} ref={audioRef}></audio>
-
-      <div
-        className={styles.title}
-        onClick={() => {
-          onComplete(todo.id).then((didTodoComplete) => {
-            if (didTodoComplete) {
-              audioRef.current.play();
-            }
-          });
-        }}
-      >
-        <span>{Icon}</span>
-        <p
-          className={styles.titleText}
-          style={todo.completed ? { textDecoration: "line-through" } : null}
-        >
-          {todo.title}
-        </p>
-      </div>
-      <span>
-        <RxDragHandleDots2
-          size={22}
+      <div className="flex justify-between">
+        <audio src={bellSound} ref={audioRef}></audio>
+        <div
+          className="flex gap-4"
           onClick={() => {
-            deleteTodo(todo.id);
+            onComplete(todo.id).then((didTodoComplete) => {
+              if (didTodoComplete) {
+                audioRef.current.play();
+              }
+            });
           }}
-        />
-      </span>
+        >
+          <span>{Icon}</span>
+          <p
+            className="inline-block min-w-[10rem] w-[18rem] text-left font-normal text-base m-0"
+            style={todo.completed ? { textDecoration: "line-through" } : null}
+          >
+            {todo.title}
+          </p>
+        </div>
+        <span>
+          <RxDragHandleDots2
+            size={22}
+            onClick={() => {
+              setShow(true);
+            }}
+          />
+        </span>
+      </div>
+      <div className="text-left text-[13px]">
+        {todo.completed ? (
+          <span>
+            Completed At : {formattedCompletedTime} {formattedCompletedDate}
+          </span>
+        ) : (
+          <span>
+            Pending: {formattedTime} {formattedDate}
+          </span>
+        )}
+      </div>
+      <ConfirmationModal
+        confirmDeletion={() => {
+          deleteTodo(todo.id);
+          setShow(false);
+        }}
+        show={show}
+        setShow={setShow}
+      />
     </div>
   );
 }
