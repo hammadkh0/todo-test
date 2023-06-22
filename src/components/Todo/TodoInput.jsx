@@ -1,16 +1,11 @@
+/* eslint-disable react/prop-types */
 import { BsPlus } from "react-icons/bs";
 import { IoSendSharp } from "react-icons/io5";
-import PropTypes from "prop-types";
-
-TodoInput.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  inputRef: PropTypes.object.isRequired,
-};
 
 const TodoInput = ({ handleSubmit, inputRef }) => {
   return (
     <form
-      className="flex w-[28.5%] my-0 mx-auto gap-[10px] bg-[#424242a4] rounded-lg mt-4 p-[10px]"
+      className="flex w-[40%] my-0 mx-auto gap-[10px] bg-[#424242a4] rounded-lg mt-4 p-[10px]"
       onSubmit={handleSubmit}
     >
       <BsPlus

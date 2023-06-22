@@ -9,25 +9,28 @@ import ConfirmationModal from "../Modal/ConfirmationModal";
 
 TodoItem.propTypes = {
   todo: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired | PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
-    createdAt: PropTypes.instanceOf(Date).isRequired,
+    createdAt: PropTypes.instanceOf(Date).isRequired | PropTypes.string.isRequired,
     completedAt: PropTypes.instanceOf(Date),
   }).isRequired,
   deleteTodo: PropTypes.func.isRequired,
   onComplete: PropTypes.func.isRequired,
 };
-
 function TodoItem({ todo, deleteTodo, onComplete }) {
   const [hovered, setHovered] = useState(false);
   const [show, setShow] = useState(false);
   const audioRef = useRef(null);
 
+  // get the time of creation of todo.
   const createdAt = new Date(todo.createdAt);
+  // format the createdAt date and time to a readable format.
   const formattedTime = createdAt.toLocaleTimeString();
   const formattedDate = createdAt.toLocaleDateString();
+  // get the time of completion of todo.
   const completedAt = new Date(todo.completedAt) || null;
+  // format the completedAt date and time to a readable format.
   const formattedCompletedTime = completedAt ? completedAt.toLocaleTimeString() : null;
   const formattedCompletedDate = completedAt ? completedAt.toLocaleDateString() : null;
 
@@ -103,5 +106,4 @@ function TodoItem({ todo, deleteTodo, onComplete }) {
     </div>
   );
 }
-
 export default TodoItem;
